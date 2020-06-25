@@ -196,9 +196,10 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
             //Multivariate-Gaussian probability 
             //now xm, ym is the the obseverved postion for particle i 
             // we are adding weight to this particle i according to its distance with the nearest landmark
+            //
 
             exponent = pow(xm-mu_x,2)/gauss_den_x + pow(ym-mu_y,2)/gauss_den_y;
-            // the weight now is the measurement probability, and we assume gaussian
+            // The particles final weight will be calculated as the product of each measurement's Multivariate-Gaussian probability density.
             weight *= gauss_norm * exp(-exponent);
 
         }
@@ -214,6 +215,17 @@ void ParticleFilter::resample() {
 	// TODO: Resample particles with replacement with probability proportional to their weight. 
 	// NOTE: You may find std::discrete_distribution helpful here.
 	//   http://en.cppreference.com/w/cpp/numeric/random/discrete_distribution
+
+
+
+    // the followings are the psuedo code
+
+    //while w[index] < beta:
+    //beta = beta - w[index]
+    //index = index + 1
+    //select p[index]
+
+    
     
     vector<Particle> new_particles (num_particles);
 
