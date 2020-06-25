@@ -77,6 +77,8 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 
 
         //avoid division by zero
+        // and update the particle position according to motion equation explained in the lecture.
+        // there are two ways to update, yaw is 0 or not, we have to seperate them
         if(fabs(yaw_rate)>0.0001){
             particles[i].x = x0 + velocity/yaw_rate * (sin(theta0+yaw_rate*delta_t) - sin(theta0));
             particles[i].y = y0 + velocity/yaw_rate * (cos(theta0) - cos(theta0+yaw_rate*delta_t));
@@ -87,7 +89,8 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
             particles[i].y = y0 + velocity*delta_t*sin(theta0);
         }
         
-        //add random gaussian noise
+        //add random gaussian noise due to the fact that even car were given a speed parameter or yaw parameter, 
+        //it could be that there exists some errors, and we assume gaussian distributions of the updated parameters of the car
         particles[i].x += dist_x(gen);
         particles[i].y += dist_y(gen);
         particles[i].theta += dist_theta(gen);
@@ -154,6 +157,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
         for(unsigned int j=0; j<observations.size(); ++j){
             //transform observation position from vehicle to map coordinate
+
             xc = observations[j].x;
             yc = observations[j].y;
             xm = xp + cos(thetap)*xc - sin(thetap)*yc;
