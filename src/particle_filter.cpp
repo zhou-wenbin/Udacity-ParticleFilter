@@ -20,12 +20,23 @@
 
 using namespace std;
 
+
+
+
+//the whole filter will tell us where is out car in a given map with an accuracy of 10cm or lesss
+//sensors are used to estimate transformation between measurements and a given map
+
+
 void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	// TODO: Set the number of particles. Initialize all particles to first position (based on estimates of 
 	//   x, y, theta and their uncertainties from GPS) and all weights to 1. 
 	// Add random Gaussian noise to each particle.
 	// NOTE: Consult particle_filter.h for more information about this method (and others in this file).
-    
+
+
+    // suppose there are 100 possible postions for the moving car, and in the rest we will always choose one with highest possibility
+    // we will update the particles with postions with high accuracy 
+    // each partivle is a vector containing x, y, coordinates and heading direction theta
     num_particles = 100;
     particles.resize(num_particles);
     weights.resize(num_particles);
@@ -183,7 +194,11 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
             }
 
             //Multivariate-Gaussian probability 
+            //now xm, ym is the the obseverved postion for particle i 
+            // we are adding weight to this particle i according to its distance with the nearest landmark
+
             exponent = pow(xm-mu_x,2)/gauss_den_x + pow(ym-mu_y,2)/gauss_den_y;
+            // the weight now is the measurement probability, and we assume gaussian
             weight *= gauss_norm * exp(-exponent);
 
         }
