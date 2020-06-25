@@ -196,7 +196,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
             //Multivariate-Gaussian probability 
             //now xm, ym is the the obseverved postion for particle i 
             // we are adding weight to this particle i according to its distance with the nearest landmark
-            //
+            //The mean of the Multivariate-Gaussian is the measurement's associated landmark position and the Multivariate-Gaussian's standard deviation is 
+            //described by our initial uncertainty in the x and y ranges. 
 
             exponent = pow(xm-mu_x,2)/gauss_den_x + pow(ym-mu_y,2)/gauss_den_y;
             // The particles final weight will be calculated as the product of each measurement's Multivariate-Gaussian probability density.
